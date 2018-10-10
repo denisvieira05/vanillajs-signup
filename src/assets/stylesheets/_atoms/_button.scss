@@ -1,0 +1,11 @@
+.button {
+  width: 100%;
+  height: 3.25em;
+  padding: 1.063em;
+  background-color: $green;
+  color: $white;
+  font-weight: bold;
+
+  &.disable {
+  }
+}

@@ -1,0 +1,16 @@
+.list-container {
+  list-style: none;
+  padding-left: 0;
+
+  > .itemlist {
+    color: $gray_text;
+    padding-bottom: 0.75em;
+    height: 1em;
+
+    &::before {
+      content: '•';
+      font-size: 2em;
+      color: $gray_bg;
+    }
+  }
+}
