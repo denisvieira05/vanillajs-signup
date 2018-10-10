@@ -1,101 +1,189 @@
-![Logo of the project](./images/logo.sample.png)
+# 📦 parcel-starter-modern
 
-# Name of the project &middot; [![Build Status](https://img.shields.io/travis/npm/npm/latest.svg?style=flat-square)](https://travis-ci.org/npm/npm) [![npm](https://img.shields.io/npm/v/npm.svg?style=flat-square)](https://www.npmjs.com/package/npm) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/your/your-project/blob/master/LICENSE)
-> Additional information or tag line
+A modern Parcel starter aiming for high productivity with _mostly_ vanilla techniques.
 
-A brief description of your project, what it is used for.
+## 🚀 Getting started
 
-## Installing / Getting started
+* Clone this project _(e.g. with `git clone`)_
+* Run `yarn` or `npm install` inside the root directory of the cloned project to install all the required dependencies
+* Start a development server by `yarn start` or `npm run start`
+  * _Other scripts like [`build`][script-build], [`lint`][script-lint] and [`format`][script-format] are also available_
 
-A quick introduction of the minimal setup you need to get a hello world up &
-running.
+[script-build]: https://parceljs.org/production.html
+[script-lint]: #linting
+[script-format]: #automatic-code-formatting
 
-```shell
-commands here
+## 🐠 Modern ECMAScript transforms
+
+Use next generation JavaScript today with the help of [Babel][] and its [env preset][babel-preset-env], configurable to [support the browsers of your choice][].
+
+> 💡 Stay up to date with the [latest ECMAScript proposals][] and utilize them without fear from lack of browser support.
+
+[babel]: https://babeljs.io/
+[babel-preset-env]: https://babeljs.io/docs/plugins/preset-env
+[support the browsers of your choice]: #override-the-list-of-targeted-browsers
+[latest ecmascript proposals]: https://github.com/tc39/proposals
+
+## 💅 Enhanced style management
+
+[SCSS][sass], a superset of CSS can be used for styling pages. The usage of Sass-specific extensions is optional, as every valid CSS stylesheet is a valid SCSS file with the same meaning.
+
+The default style of browsers is normalized by [modern-normalize][].
+
+Stylesheets are processed by [PostCSS][], providing proper browser support for modern CSS syntax through its [env preset][postcss-preset-env] and [Autoprefixer][].
+
+[sass]: https://sass-lang.com/
+[postcss]: http://postcss.org/
+[postcss-preset-env]: https://github.com/jonathantneal/postcss-preset-env
+[autoprefixer]: https://github.com/postcss/autoprefixer
+[modern-normalize]: https://github.com/sindresorhus/modern-normalize
+
+## ✨ Superior developer experience
+
+### Automatic code formatting
+
+[Prettier][] is an opinionated code formatter aiming to provide codebase consistency when multiple developers work on the same project. The main reason behind adopting Prettier is to [stop all the on-going debates over coding styles][].
+
+[prettier]: https://prettier.io/
+[stop all the on-going debates over coding styles]: https://prettier.io/docs/en/why-prettier.html
+
+### Linting
+
+[Linters][lint] are tools that analyze source code to flag programming errors, bugs, stylistic errors, and suspicious constructs.
+
+* JavaScript files are linted by [ESLint][], enforcing the [Airbnb JavaScript Style Guide][] through an overridable set of rules provided by [eslint-config-airbnb-base][].
+* SCSS files are linted by [stylelint][], adhering to the rules specified in [stylelint-config-recommended-scss][] and the [declaration order conventions of idiomatic-css][] _(enforced by [stylelint-config-idiomatic-order][])_.
+
+[lint]: https://en.wikipedia.org/wiki/Lint_(software)
+[eslint]: https://eslint.org/
+[airbnb javascript style guide]: https://github.com/airbnb/javascript
+[eslint-config-airbnb-base]: https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb-base
+[stylelint]: https://stylelint.io/
+[stylelint-config-recommended-scss]: https://github.com/kristerkari/stylelint-config-recommended-scss
+[declaration order conventions of idiomatic-css]: https://github.com/necolas/idiomatic-css#declaration-order
+[stylelint-config-idiomatic-order]: https://github.com/ream88/stylelint-config-idiomatic-order
+
+### Construct flexible layouts with ease
+
+[Bulma][] is a modular, mobile-first CSS framework. It can be used along with the [HTML viewport meta tag][] to build responsive websites with ease.
+
+[bulma]: https://bulma.io/
+[html viewport meta tag]: https://developer.mozilla.org/en-US/docs/Mozilla/Mobile/Viewport_meta_tag
+
+## 🛠️ Configurable with reasonable defaults
+
+### Override the list of targeted browsers
+
+By default, [Parcel targets modern browsers][]. This behavior [can be overrided in numerous ways][browserslist], e.g. by a `.browserslistrc` config file:
+
+```
+> 1%
+last 2 versions
 ```
 
-Here you should say what actually happens when you execute the code above.
+[parcel targets modern browsers]: https://github.com/parcel-bundler/parcel/blob/master/src/utils/getTargetEngines.js
+[browserslist]: https://github.com/browserslist/browserslist
 
-## Developing
+### Opt-in templating support
 
-### Built With
-List main libraries, frameworks used including versions (React, Angular etc...)
+Building a multi-page website may introduce unwanted redundancy to your project. In this case, consider using an HTML templating solution.
 
-### Prerequisites
-What is needed to set up the dev environment. For instance, global dependencies or any other tools. include download links.
+> 💡 Pages with similar layout should rely on a single template instead of duplicated code.
 
+#### Example
 
-### Setting up Dev
+_To demonstrate the concept of templating, a "vanilla-like" solution will be used._
 
-Here's a brief intro about what a developer must do in order to start developing
-the project further:
+Firstly, install [posthtml-extend][] _(or the templating library of your choice)_:
 
-```shell
-git clone https://github.com/your/your-project.git
-cd your-project/
-packagemanager install
+```bash
+yarn add posthtml-extend
 ```
 
-And state what happens step-by-step. If there is any virtual environment, local server or database feeder needed, explain here.
+After that, add a `.posthtmlrc` file to the root of your project, [as instructed by the official Parcel docs][parcel-transforms-posthtml]:
 
-### Building
-
-If your project needs some additional steps for the developer to build the
-project after some code changes, state them here. for example:
-
-```shell
-./configure
-make
-make install
+```json
+{
+  "plugins": {
+    "posthtml-extend": {
+      "root": "./src/layouts"
+    }
+  }
+}
 ```
 
-Here again you should state what actually happens when the code above gets
-executed.
+Finally, create a new layout and a page based on it.
 
-### Deploying / Publishing
-give instructions on how to build and release a new version
-In case there's some step you have to take that publishes this project to a
-server, this is the right time to state it.
+`src/layouts/index.html`:
 
-```shell
-packagemanager deploy your-project -s server.com -u username -p password
+```html
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+
+  <title>
+    <block name="title"> | Website title</block>
+  </title>
+</head>
+
+<body>
+  <main>
+    <block name="main" />
+  </main>
+
+  <footer>
+    <block name="footer">Footer content</block>
+  </footer>
+</body>
+
+</html>
 ```
 
-And again you'd need to tell what the previous code actually does.
+`src/pages/index.html`:
 
-## Versioning
+```html
+<!-- The line below refers to "src/layouts/index.html", as specified in ".posthtmlrc" -->
+<extends src="index.html">
+  <block name="title" type="prepend">Page title</block>
 
-We can maybe use [SemVer](http://semver.org/) for versioning. For the versions available, see the [link to tags on this repository](/tags).
+  <block name="main">
+    <h1>Hello, templating!</h1>
+    <p>Goodbye, code duplication!</p>
+  </block>
 
-
-## Configuration
-
-Here you should write what are all of the configurations a user can enter when
-using the project.
-
-## Tests
-
-Describe and show how to run the tests with code examples.
-Explain what these tests test and why.
-
-```shell
-Give an example
+  <block name="footer" type="append"> – Author name</block>
+</extends>
 ```
 
-## Style guide
+The result should look as follows:
 
-Explain your code style and show how to check it.
+```html
+<!DOCTYPE html>
+<html>
 
-## Api Reference
+<head>
+  <meta charset="utf-8" />
 
-If the api is external, link to api documentation. If not describe your api including authentication methods as well as explaining all the endpoints with their required parameters.
+  <title>
+    Page title | Website title
+  </title>
+</head>
 
+<body>
+  <main>
+    <h1>Hello, templating!</h1>
+    <p>Goodbye, code duplication!</p>
+  </main>
 
-## Database
+  <footer>
+    <block name="footer">Footer content – Author name</block>
+  </footer>
+</body>
 
-Explaining what database (and version) has been used. Provide download links.
-Documents your database design and schemas, relations etc... 
+</html>
+```
 
-## Licensing
-
-State what the license is and how to find the text version of the license.
+[posthtml-extend]: https://github.com/posthtml/posthtml-extend
+[parcel-transforms-posthtml]: https://parceljs.org/transforms.html#posthtml
