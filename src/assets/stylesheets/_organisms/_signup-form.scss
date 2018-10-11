@@ -1,0 +1,27 @@
+.general-container {
+  display: flex;
+  justify-content: center;
+}
+
+.signup-container {
+  display: flex;
+  margin-top: 5em;
+
+  > .mainlogo {
+    align-self: center;
+  }
+
+  > .maintitle {
+    font-size: 1.375em;
+    align-self: center;
+    color: $light_black;
+  }
+
+}
+
+.signup-form {
+  
+  > .list-container {
+    margin-bottom: 1.500em;
+  }
+}

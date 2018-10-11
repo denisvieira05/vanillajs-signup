@@ -1,6 +1,7 @@
 .list-container {
   list-style: none;
-  padding-left: 0;
+  margin: 0;
+  padding: 0;
 
   > .itemlist {
     color: $gray_text;
@@ -10,7 +11,17 @@
     &::before {
       content: '•';
       font-size: 2em;
-      color: $gray_bg;
+      color: $gray_bg; 
     }
+
+    &.isvalid::before {
+      color: $green;
+    }
+
+    &.isinvalid::before{
+      color: $light_red;
+    }
+
   }
+  
 }

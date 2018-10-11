@@ -1,6 +1,15 @@
 .strenght-indicator {
   width: 7.479em;
   height: 0.5em;
-  background: $gray_bg;
+  background-color: $gray_bg;
   border-radius: 10em;
+
+  &.isvalid {
+    background-color: $green;
+  }
+
+  &.isinvalid {
+    background-color: $light_red;
+  }
+    
 }

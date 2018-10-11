@@ -21,11 +21,11 @@
 
   <div class="general-container">
     <section class="signup-container card">
-      <a href="#" class="olist-logo">
+      <a href="#" class="mainlogo">
         <img src="./assets/images/logotype.svg" alt="olist logo">
       </a>
 
-      <h1 class="title">Crie sua conta</h1>
+      <h1 class="maintitle">Crie sua conta</h1>
 
       <form class="signup-form">
         <div class="form-input">
@@ -34,28 +34,28 @@
         </div>
         <div class="form-input">
           <label for="signup-email" class="formlabel">E-mail</label>
-          <input type="email" name="signup-email" id="signup-email" class="forminput">
+          <input type="email" name="signup-email" id="signup-email" class="forminput isinvalid">
         </div>
         <div class="form-input">
           <label for="signup-password" class="formlabel">Senha</label>
-          <input type="password" name="signup-password" id="signup-password" class="forminput">
+          <input type="password" name="signup-password" id="signup-password" class="forminput isvalid">
         </div>
 
         <div class="strenght-container">
+          <div class="strenght-indicator isvalid"></div>
           <div class="strenght-indicator"></div>
-          <div class="strenght-indicator"></div>
-          <div class="strenght-indicator"></div>
+          <div class="strenght-indicator isinvalid"></div>
         </div>
 
         <ul class="list-container">
-          <li class="itemlist">
-            <span class="req-1"></span>Pelo menos 6 caracteres
+          <li class="itemlist isvalid">
+            Pelo menos 6 caracteres
+          </li>
+          <li class="itemlist isinvalid">
+            Pelo menos 1 letra maiúscula
           </li>
           <li class="itemlist">
-            <span class="req-2"></span>Pelo menos 1 letra maiúscula
-          </li>
-          <li class="itemlist">
-            <span class="req-3"></span>Pelo menos 1 número
+            Pelo menos 1 número
           </li>
         </ul>
 
@@ -64,7 +64,7 @@
           <input type="password" name="signup-confirm-password" id="signup-confirm-password" class="forminput">
         </div>
 
-        <button type="submit" class="button" disabled>
+        <button type="submit" class="form-button" disabled>
           Criar conta
         </button>
 
@@ -76,7 +76,7 @@
 
 
   <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
-  <script src="./index.js"></script>
+  <script src="./assets/scripts/index.js"></script>
 </body>
 
 </html>

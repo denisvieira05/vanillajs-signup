@@ -5,6 +5,8 @@
   background-color: $green;
   color: $white;
   font-weight: bold;
+  border: none;
+  border-radius: 0.2em;
 
   &.disable {
   }

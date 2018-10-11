@@ -1,4 +1,13 @@
 .input {
   border: 1px solid $strong_gray;
   padding: 0.5em;
+
+  &.isvalid {
+    border-color: $green;
+  }
+
+  &.isinvalid {
+    border-color: $light_red;
+  }
+  
 }
