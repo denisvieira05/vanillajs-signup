@@ -1,9 +1,13 @@
-.olist-input {
-  background-color: red;
-  margin-top: 50px;
-  color: yellow;
-}
+.input {
+  border: 1px solid $strong_gray;
+  padding: 0.5em;
 
-.teste {
-  background: red;
+  &.isvalid {
+    border-color: $green;
+  }
+
+  &.isinvalid {
+    border-color: $light_red;
+  }
+  
 }

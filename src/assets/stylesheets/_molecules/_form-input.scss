@@ -1,0 +1,15 @@
+.form-input {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.5em;
+
+  > .formlabel {
+    color: $gray_text;
+    font-size: 1em;
+    padding-bottom: 0.5em;
+  }
+
+  > .forminput {
+    @extend .input;
+  }
+}
