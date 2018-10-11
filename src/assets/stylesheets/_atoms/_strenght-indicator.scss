@@ -11,5 +11,9 @@
   &.isinvalid {
     background-color: $light_red;
   }
+
+  &.iswarning {
+    background-color: $yellow;
+  }
     
 }
