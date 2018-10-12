@@ -12,6 +12,7 @@
       content: '•';
       font-size: 2em;
       color: $gray_bg; 
+      margin-right: 0.3em;
     }
 
     &.isvalid::before {
