@@ -3,33 +3,68 @@ import { documentSelector, createElement } from '../../utils'
 
 class FormInput {
 
-  constructor(formInputContainerReferenceName, isCheckingOnAllChange, inputValidationTypes,
-    showTextRulesOnView, showStrenghtIndicatorsOnView, formInputContainerReferenceNameToBeMatch) {
-
-    this.formInputElement = documentSelector(`${formInputContainerReferenceName} > .forminput`);
-    this.formInputContainer = documentSelector(formInputContainerReferenceName);
-    this.formInputToBeMatch = null;
-    this.validationTypes = inputValidationTypes;
+  constructor(build) {
+    this.formInputContainer = build.formInputContainer;
+    this.formInputElement = build.formInputElement;
+    this.validationTypes = build.validationTypes;
+    this.formInputToBeMatch = build.formInputToBeMatch;
+    this.isShowTextRulesOnView = build.isShowTextRulesOnView
+    this.isShowStrenghtIndicatorsOnView = build.isShowStrenghtIndicatorsOnView;
+    this.onChangeListener = build.onChangeListener
     this.invalidRules = []
     this.validValue = ''
     this.activeSimpleInputValidatorOnView = false;
-    this.isShowTextRulesOnView = showTextRulesOnView;
-    this.isShowStrenghtIndicatorsOnView = showStrenghtIndicatorsOnView;
 
-    if (formInputContainerReferenceNameToBeMatch) {
-      this.formInputToBeMatch = documentSelector(`${formInputContainerReferenceNameToBeMatch} > .forminput`);
-    }
+    this._addListeners(build.shouldRunVerificationOnAllChange);
 
-    this._addListeners(isCheckingOnAllChange);
-
-    if (showStrenghtIndicatorsOnView)
+    if (this.isShowStrenghtIndicatorsOnView)
       this._showStrenghtRulesIndicatorsOnView()
 
-    if (showTextRulesOnView)
+    if (this.isShowTextRulesOnView)
       this._showTextRulesOnView(this.validationTypes)
 
-    if (!showStrenghtIndicatorsOnView && !showTextRulesOnView && inputValidationTypes.length !== 0)
+    if (!this.isShowStrenghtIndicatorsOnView && !this.isShowTextRulesOnView && this.validationTypes.length !== 0)
       this._activeSimpleValidatorOnView()
+  }
+
+  static get Builder() {
+    class Builder {
+      constructor(formInputContainerReferenceName, inputValidationTypes) {
+        this.formInputContainer = documentSelector(formInputContainerReferenceName);
+        this.formInputElement = documentSelector(`${formInputContainerReferenceName} > .forminput`);
+        this.validationTypes = inputValidationTypes;
+      }
+
+      withShowStrenghtIndicatorsOnView() {
+        this.isShowStrenghtIndicatorsOnView = true;
+        return this;
+      }
+
+      withOnChangeListener(onChange) {
+        this.onChangeListener = onChange;
+        return this;
+      }
+
+      withShowTextRulesOnView() {
+        this.isShowTextRulesOnView = true;
+        return this;
+      }
+
+      shouldRunVerificationOnAllChange() {
+        this.shouldRunVerificationOnAllChange = true;
+        return this;
+      }
+
+      withFormInputContainerReferenceNameToBeMatch(formInputContainerReferenceNameToBeMatch) {
+        this.formInputToBeMatch = documentSelector(`${formInputContainerReferenceNameToBeMatch} > .forminput`);
+        return this;
+      }
+
+      build() {
+        return new FormInput(this);
+      }
+    }
+    return Builder;
   }
 
   _activeSimpleValidatorOnView() {
@@ -128,13 +163,15 @@ class FormInput {
       this._updateStrenghtRulesIndicators(invalidRulesQuantity)
 
     if (this.activeSimpleInputValidatorOnView) {
-
       if (invalidRulesQuantity === 0) {
         this._removeSimpleInvalidRulesContainerOnView()
       } else {
         this._showSimpleInvalidRulesContainerOnView(this.invalidRules)
       }
     }
+
+    if (this.onChangeListener)
+      this.onChangeListener()
   }
 
   _showSimpleInvalidRulesContainerOnView(invalidRules) {
@@ -252,6 +289,10 @@ class FormInput {
 
   getInputValue() {
     return this.validValue
+  }
+
+  isValid() {
+    return this.validValue !== '' && this.validValue !== null && this.invalidRules.length === 0
   }
 
 }
