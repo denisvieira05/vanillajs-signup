@@ -21,7 +21,6 @@ class SignUp {
 
     this.emailFormInput = new FormInput('#email-container', true, [
       INPUT_VALIDATION_TYPES.HAS_EMAIL,
-      INPUT_VALIDATION_TYPES.HAS_AN_NUMBER,
     ], false, false)
 
     this.passwordFormInput = new FormInput('#password-container', true, [
