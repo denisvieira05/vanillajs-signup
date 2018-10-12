@@ -3,21 +3,37 @@ import { documentSelector, createElement } from '../../utils'
 
 class FormInput {
 
-  constructor(formInputContainerReferenceName, inputValidationTypes, showTextRulesOnView, showStrenghtIndicatorsOnView) {
-    this.inputElement = documentSelector(`${formInputContainerReferenceName} > .forminput`);
+  constructor(formInputContainerReferenceName, isCheckingOnAllChange, inputValidationTypes,
+    showTextRulesOnView, showStrenghtIndicatorsOnView, formInputContainerReferenceNameToBeMatch) {
+
+    this.formInputElement = documentSelector(`${formInputContainerReferenceName} > .forminput`);
     this.formInputContainer = documentSelector(formInputContainerReferenceName);
+    this.formInputToBeMatch = null;
     this.validationTypes = inputValidationTypes;
     this.invalidRules = []
     this.validValue = ''
+    this.activeSimpleInputValidatorOnView = false;
+    this.isShowTextRulesOnView = showTextRulesOnView;
+    this.isShowStrenghtIndicatorsOnView = showStrenghtIndicatorsOnView;
 
-    this._addListeners();
+    if (formInputContainerReferenceNameToBeMatch) {
+      this.formInputToBeMatch = documentSelector(`${formInputContainerReferenceNameToBeMatch} > .forminput`);
+    }
+
+    this._addListeners(isCheckingOnAllChange);
 
     if (showStrenghtIndicatorsOnView)
       this._showStrenghtRulesIndicatorsOnView()
 
     if (showTextRulesOnView)
-      this._showTextRulesOnView()
+      this._showTextRulesOnView(this.validationTypes)
 
+    if (!showStrenghtIndicatorsOnView && !showTextRulesOnView && inputValidationTypes.length !== 0)
+      this._activeSimpleValidatorOnView()
+  }
+
+  _activeSimpleValidatorOnView() {
+    this.activeSimpleInputValidatorOnView = true
   }
 
   _showStrenghtRulesIndicatorsOnView() {
@@ -36,14 +52,17 @@ class FormInput {
     this.formInputContainer.appendChild(strenghtValidationContainer);
   }
 
-  _showTextRulesOnView() {
+  _showTextRulesOnView(validationTypes, allValidatorsIsInvalid) {
     let textRulesListContainer = createElement('ul');
     textRulesListContainer.className = 'list-container';
 
-    this.validationTypes.forEach((validationType) => {
+    validationTypes.forEach((validationType) => {
       const strenghtIndicator = createElement('li')
       strenghtIndicator.className = 'itemlist'
       strenghtIndicator.innerHTML = this._getValidationTextByType(validationType)
+
+      if (allValidatorsIsInvalid)
+        strenghtIndicator.classList.add('isinvalid')
 
       textRulesListContainer.appendChild(strenghtIndicator)
     })
@@ -57,8 +76,12 @@ class FormInput {
     return INPUT_VALIDATION_TYPES_TEXT[validationType]
   }
 
-  _addListeners() {
-    this.inputElement.addEventListener('input', () => this._runInputValidators())
+  _addListeners(checkOnChange) {
+    const listenerType = checkOnChange ? 'input' : 'change'
+    this.formInputElement.addEventListener(listenerType, () => {
+      if (this.validationTypes.length > 0)
+        this._runInputValidators()
+    })
   }
 
   _addInvalidRule(invalidValidationType) {
@@ -75,15 +98,15 @@ class FormInput {
     this.validValue = value;
   }
 
-  _inputValueValidator(inputValueOnValidation, validCondition, validationType) {
-    validCondition ? (
+  _inputValueValidator(inputValueOnValidation, validConditionFunction, validationType) {
+    validConditionFunction() ? (
       this._updateValidValue(inputValueOnValidation),
       this._removeInvalidRule(validationType)
     ) : this._addInvalidRule(validationType)
   }
 
   _runInputValidators() {
-    const inputValueChanged = this.inputElement.value
+    const inputValueChanged = this.formInputElement.value
 
     this.validationTypes.forEach(validationType => {
       this._inputValueValidator(inputValueChanged,
@@ -94,12 +117,34 @@ class FormInput {
     const invalidRulesQuantity = this.invalidRules.length
 
     if (invalidRulesQuantity === 0)
-      this.showValidInputStyle()
+      this._showValidInputStyle()
     else
-      this.showInvalidInputStyle()
+      this._showInvalidInputStyle()
 
-    this._updateTextRulesStatusIndicators()
-    this._updateStrenghtRulesIndicators(invalidRulesQuantity)
+    if (this.isShowTextRulesOnView)
+      this._updateTextRulesStatusIndicators()
+
+    if (this.isShowStrenghtIndicatorsOnView)
+      this._updateStrenghtRulesIndicators(invalidRulesQuantity)
+
+    if (this.activeSimpleInputValidatorOnView) {
+
+      if (invalidRulesQuantity === 0) {
+        this._removeSimpleInvalidRulesContainerOnView()
+      } else {
+        this._showSimpleInvalidRulesContainerOnView(this.invalidRules)
+      }
+    }
+  }
+
+  _showSimpleInvalidRulesContainerOnView(invalidRules) {
+    this._removeSimpleInvalidRulesContainerOnView()
+    this._showTextRulesOnView(invalidRules, true)
+  }
+
+  _removeSimpleInvalidRulesContainerOnView() {
+    if (this.textRulesListContainer)
+      this.textRulesListContainer.remove()
   }
 
   _updateTextRulesStatusIndicators() {
@@ -160,18 +205,23 @@ class FormInput {
 
   _getValidationRuleByType(validationType, valueToVerify) {
     const validatorsMap = {
-      HAS_EMAIL: this._hasValidEmail(valueToVerify),
-      NOT_EMPTY: this._isNotEmpty(valueToVerify),
-      HAS_AN_CAPITAL_LETTER: this._hasAnCapitalLetter(valueToVerify),
-      HAS_AN_NUMBER: this._hasAnNumber(valueToVerify),
-      HAS_MINIMAL_CHARACTERS: this._hasMinimalCharacters(valueToVerify),
+      HAS_EMAIL: () => this._hasValidEmail(valueToVerify),
+      NOT_EMPTY: () => this._isNotEmpty(valueToVerify),
+      HAS_AN_CAPITAL_LETTER: () => this._hasAnCapitalLetter(valueToVerify),
+      HAS_AN_NUMBER: () => this._hasAnNumber(valueToVerify),
+      HAS_MINIMAL_CHARACTERS: () => this._hasMinimalCharacters(valueToVerify),
+      INPUT_VALUE_IS_EQUAL_TO_THE_OTHER_FORM_INPUT: () => this._otherFormInputIsMatched(valueToVerify),
     }
 
     return validatorsMap[validationType]
   }
 
+  _otherFormInputIsMatched(value) {
+    return this.formInputToBeMatch.value === value
+  }
+
   _hasMinimalCharacters(value) {
-    return value.length >= 10
+    return value.length >= 6
   }
 
   _hasAnNumber(value) {
@@ -190,14 +240,18 @@ class FormInput {
     return value !== '' && value !== undefined && value !== null
   }
 
-  showInvalidInputStyle() {
-    this.inputElement.classList.remove('isvalid');
-    this.inputElement.classList.add('isinvalid');
+  _showInvalidInputStyle() {
+    this.formInputElement.classList.remove('isvalid');
+    this.formInputElement.classList.add('isinvalid');
   }
 
-  showValidInputStyle() {
-    this.inputElement.classList.remove('isinvalid');
-    this.inputElement.classList.add('isvalid');
+  _showValidInputStyle() {
+    this.formInputElement.classList.remove('isinvalid');
+    this.formInputElement.classList.add('isvalid');
+  }
+
+  getInputValue() {
+    return this.validValue
   }
 
 }
