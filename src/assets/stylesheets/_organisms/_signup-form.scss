@@ -6,12 +6,25 @@
 .signup-container {
   display: flex;
   margin-top: 5em;
+  // display: none;
 
   > .mainlogo {
     align-self: center;
   }
 
+
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  
+  > .list-container {
+    margin-bottom: 1.500em;
+  }
+
   > .maintitle {
+    display: flex;
     font-size: 1.375em;
     align-self: center;
     color: $light_black;
@@ -19,9 +32,35 @@
 
 }
 
-.signup-form {
-  
-  > .list-container {
-    margin-bottom: 1.500em;
+.loading-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 8em;
+}
+
+.success-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4em;
+
+  > .successtitle {
+    color: $light_black;
+    font-size: 1.375em;
+    font-weight: bold;
+    margin-top: 0.6em;
   }
+
+  > .successdescription {
+    color: $light_black;
+    text-align: center;
+  }
+
+  > .checkicon {
+    width: 64px;
+    height: 64px;
+    border: 3px solid $green;
+    border-radius: 50%;
+  }
+
 }

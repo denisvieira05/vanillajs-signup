@@ -25,9 +25,9 @@
         <img src="./assets/images/logotype.svg" alt="olist logo">
       </a>
 
-      <h1 class="maintitle">Crie sua conta</h1>
-
       <form class="signup-form">
+
+        <h1 class="maintitle">Crie sua conta</h1>
 
         <div id="name-container" class="form-input">
           <label for="username-container" class="formlabel">Nome completo</label>
@@ -50,12 +50,34 @@
         </div>
 
         <button id="submit-button" type="button" class="form-button" disabled>
-          Criar conta
+          <span id="createaccount-text">Criar conta</span>
+          <div id="createaccount-loader" class="balls-loader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
         </button>
 
       </form>
 
+      <section class="loading-container">
+        <div class="ring-loader">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </section>
+
+      <section class="success-container">
+        <img class="checkicon" src="./assets/images/iconcheck.svg" alt="Check Icon">
+        <span class="successtitle">Tudo certo</span>
+        <p class="successdescription">Verifique sua caixa de entrada para confirmar seu e-mail</p>
+      </section>
+
     </section>
+
 
   </div>
 
